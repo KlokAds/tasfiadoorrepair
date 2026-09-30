@@ -57,9 +57,11 @@ class FrontendController extends Controller
             'reviews' => ReviewFeed::build(3),
             'latestBlogs' => BlogDetail::published()->latest('published_at')->take(3)->get(['id', 'name', 'slug', 'image', 'excerpt', 'published_at']),
             'partners' => Partner::all(['id', 'image']),
-            // Real before/after photos from service pages (only where the two photos differ).
+            // Real before/after photos from service pages: only pairs that differ and are sharp enough
+            // to show large (small or mismatched photos look blurry in the comparison slider).
             'showcase' => $this->liveServices()->whereNotNull('bef_img')->whereNotNull('aft_img')->whereColumn('bef_img', '!=', 'aft_img')
-                ->orderBy('order')->take(4)->get(['id', 'name', 'slug', 'short_summary', 'bef_img', 'aft_img']),
+                ->orderBy('order')->get(['id', 'name', 'slug', 'short_summary', 'bef_img', 'aft_img'])
+                ->filter(fn ($s) => self::goodPair($s->bef_img, $s->aft_img))->take(4)->values(),
         ]);
     }
 
@@ -406,6 +408,22 @@ class FrontendController extends Controller
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::warning('Enquiry notification failed', ['error' => $e->getMessage()]);
         }
+    }
+
+    /** Both photos exist, are at least 1000 px wide and have a similar shape. Measured once a day per photo pair. */
+    private static function goodPair(string $before, string $after): bool
+    {
+        return \Illuminate\Support\Facades\Cache::remember('showcase.pair.' . md5($before . '|' . $after), now()->addDay(), function () use ($before, $after) {
+            $a = @getimagesize(public_path($before));
+            $b = @getimagesize(public_path($after));
+            if (!$a || !$b || min($a[0], $b[0]) < 1000) {
+                return false;
+            }
+            $ra = $a[0] / $a[1];
+            $rb = $b[0] / $b[1];
+
+            return abs($ra - $rb) / max($ra, $rb) <= 0.15;
+        });
     }
 
     private function liveServices()

@@ -129,22 +129,23 @@
             <p class="eyebrow">Before &amp; after</p>
             <h2 class="h-section mt-3">See the difference on real jobs</h2>
           </div>
-          <p class="lead">Drag the slider on each photo. These are doors our technicians repaired in Singapore homes and offices.</p>
+          <p class="lead lg:pb-1">Drag the handle on the photo. These are doors our technicians repaired in Singapore homes and offices.</p>
         </div>
-        <div class="grid lg:grid-cols-[1.35fr_1fr] gap-8 items-start">
-          <BeforeAfter :key="active.id" :before="active.bef_img" :after="active.aft_img" :title="active.name" />
-          <div>
-            <div class="grid gap-2" role="tablist" aria-label="Choose a job">
+        <!-- Portrait frame (most job photos are portrait), so nothing is cropped away and the section stays compact -->
+        <div class="grid lg:grid-cols-[minmax(0,26rem)_1fr] gap-8 lg:gap-12 items-center">
+          <BeforeAfter :key="active.id" :before="active.bef_img" :after="active.aft_img" :title="active.name" ratio="aspect-[4/5]" class="w-full max-w-md mx-auto lg:max-w-none" />
+          <div class="min-w-0">
+            <div class="grid gap-3" role="tablist" aria-label="Choose a job">
               <button v-for="(j, i) in showcase" :key="j.id" type="button" role="tab" :aria-selected="i === activeJob" @click="activeJob = i"
-                :class="['text-left rounded-lg border px-5 py-4 transition', i === activeJob ? 'border-[var(--s-accent)] bg-[var(--s-surface)] shadow-[var(--s-shadow)]' : 's-border hover:border-[var(--s-border-2)]']">
-                <span class="flex items-center justify-between gap-3">
-                  <span class="font-bold s-heading text-[16px]">{{ j.name }}</span>
-                  <span :class="['w-2.5 h-2.5 rounded-full shrink-0', i === activeJob ? 'bg-[var(--s-accent)]' : 'bg-[var(--s-border-2)]']"></span>
+                :class="['text-left rounded-lg border p-3 sm:p-4 flex items-center gap-4 transition', i === activeJob ? 'border-[var(--s-accent)] bg-[var(--s-surface)] shadow-[var(--s-shadow)]' : 's-border hover:border-[var(--s-border-2)] hover:bg-[var(--s-surface)]']">
+                <img :src="img(j.aft_img, 160)" alt="" width="72" height="72" loading="lazy" decoding="async" class="w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-md object-cover shrink-0 border s-border" />
+                <span class="min-w-0">
+                  <span class="block font-bold s-heading text-[16px] leading-snug">{{ j.name }}</span>
+                  <span v-if="j.short_summary" class="mt-1 block text-[14.5px] s-muted leading-relaxed line-clamp-2">{{ j.short_summary }}</span>
                 </span>
-                <span v-if="i === activeJob && j.short_summary" class="mt-2 block text-[15px] s-muted leading-relaxed">{{ j.short_summary }}</span>
               </button>
             </div>
-            <Link :href="`/service/${active.slug}`" class="mt-5 inline-flex link items-center gap-1.5">About {{ active.name.toLowerCase() }} <span aria-hidden="true">→</span></Link>
+            <Link :href="`/service/${active.slug}`" class="mt-6 inline-flex link items-center gap-1.5">About {{ active.name.toLowerCase() }} <span aria-hidden="true">→</span></Link>
           </div>
         </div>
       </div>

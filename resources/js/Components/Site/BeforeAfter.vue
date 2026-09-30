@@ -1,6 +1,6 @@
 <template>
   <figure class="select-none">
-    <div ref="box" class="relative overflow-hidden rounded-md border s-border s-surface-2 aspect-square cursor-ew-resize touch-pan-y"
+    <div ref="box" :class="['relative overflow-hidden rounded-md border s-border s-surface-2 cursor-ew-resize touch-pan-y', ratio]"
       @pointerdown="start" @pointermove="move" @pointerup="stop" @pointercancel="stop" @pointerleave="stop">
       <!-- After (full) -->
       <img :src="img(after, 1280)" :srcset="srcset(after, 1600)" sizes="(min-width: 1024px) 760px, 100vw" :alt="`${title}: after`" class="absolute inset-0 w-full h-full object-cover" :loading="eager ? 'eager' : 'lazy'" :fetchpriority="eager ? 'high' : 'auto'" decoding="async" draggable="false" />
@@ -27,7 +27,7 @@
 import { ref } from 'vue';
 import { img, srcset } from '@/utils/img';
 
-defineProps({ before: String, after: String, title: { type: String, default: '' }, eager: Boolean });
+defineProps({ before: String, after: String, title: { type: String, default: '' }, eager: Boolean, ratio: { type: String, default: 'aspect-square' } });
 
 const pos = ref(50);
 const box = ref(null);
