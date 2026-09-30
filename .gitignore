@@ -1,0 +1,49 @@
+*.log
+.DS_Store
+.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+/.codex
+/.cursor/
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+/auth.json
+/node_modules
+/public/Admin
+# Photos uploaded on the old site (already on the server, like /public/Admin)
+/public/Images
+/public/fonts-manifest.dev.json
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+/database/*.sqlite
+/database/*.sqlite-journal
+/database/backups
+_ide_helper.php
+Homestead.json
+Homestead.yaml
+Thumbs.db
+
+/public/cache
+
+# Never commit data or secrets
+/u605894151_*
+*.sql
+*.sql.gz
+*.sqlite
+*.sqlite3
+/database/backups
+/storage/app/private
+# Old copy of the frontend, not used by the build
+/resources/resources
+
+# Runtime state written by the app itself (automatic setup and migration lock)
+/storage/framework/setup-state.json
+/storage/framework/migrate.lock
