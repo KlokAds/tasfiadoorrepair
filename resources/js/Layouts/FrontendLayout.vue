@@ -13,6 +13,7 @@
   </Head>
 
   <div class="site min-h-screen flex flex-col pb-[4.25rem] lg:pb-0">
+    <div ref="topMarker" aria-hidden="true" class="absolute top-0 left-0 w-px h-2 pointer-events-none"></div>
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] btn btn-primary">Skip to content</a>
 
     <!-- Header -->
@@ -409,10 +410,17 @@ onMounted(() => document.addEventListener('keydown', onSearchKey));
 onBeforeUnmount(() => document.removeEventListener('keydown', onSearchKey));
 
 // Scroll shadow on the header
+// A tiny marker at the top of the page is watched instead of reading the scroll position,
+// so the browser never has to recalculate layout for it.
 const scrolled = ref(false);
-const onScroll = () => { scrolled.value = window.scrollY > 8; };
-onMounted(() => { onScroll(); window.addEventListener('scroll', onScroll, { passive: true }); });
-onBeforeUnmount(() => window.removeEventListener('scroll', onScroll));
+const topMarker = ref(null);
+let topObserver;
+onMounted(() => {
+  if (!topMarker.value || !('IntersectionObserver' in window)) return;
+  topObserver = new IntersectionObserver(([entry]) => { scrolled.value = !entry.isIntersecting; });
+  topObserver.observe(topMarker.value);
+});
+onBeforeUnmount(() => topObserver?.disconnect());
 
 // Flash messages (e.g. after sending the contact form)
 const toast = ref(null);
