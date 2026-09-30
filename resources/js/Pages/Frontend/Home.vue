@@ -170,8 +170,8 @@
 
     <!-- ============ Quote (own section when switched on in admin) ============ -->
     <section v-if="hero.show_quote_form" id="quote" class="section-y s-bg-alt border-y s-border">
-      <div class="container-app grid lg:grid-cols-[1fr_1.1fr] gap-10 lg:gap-16 items-center">
-        <div>
+      <div class="container-app grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-10 lg:gap-16 items-center">
+        <div class="min-w-0">
           <p class="eyebrow">Free quote</p>
           <h2 class="h-section mt-3">{{ texts.steps_title || 'Tell us about the door. We reply with a price.' }}</h2>
           <p v-if="texts.quote_intro" class="lead mt-3">{{ texts.quote_intro }}</p>
@@ -185,7 +185,7 @@
             </li>
           </ol>
         </div>
-        <div class="card p-6 sm:p-8" style="box-shadow: var(--s-shadow-lg)">
+        <div class="card min-w-0 p-5 sm:p-8" style="box-shadow: var(--s-shadow-lg)">
           <h3 class="h-card !text-[1.2rem]">Request a free quote</h3>
           <p class="text-[15px] s-muted mt-1 mb-6">We usually reply within a few hours.</p>
           <QuoteForm :services="serviceOptions" subject="Quote request · Homepage" id-prefix="hero" />
