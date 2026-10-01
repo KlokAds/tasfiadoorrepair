@@ -3,9 +3,9 @@
     <div ref="box" :class="['relative overflow-hidden rounded-md border s-border s-surface-2 cursor-ew-resize touch-pan-y', ratio]"
       @pointerdown="start" @pointermove="move" @pointerup="stop" @pointercancel="stop" @pointerleave="stop">
       <!-- After (full) -->
-      <img :src="img(after, 1280)" :srcset="srcset(after, 1600)" sizes="(min-width: 1024px) 760px, 100vw" :alt="`${title}: after`" class="absolute inset-0 w-full h-full object-cover" :loading="eager ? 'eager' : 'lazy'" :fetchpriority="eager ? 'high' : 'auto'" decoding="async" draggable="false" />
+      <img :srcset="srcset(after, 1600)" :sizes="sizes" :alt="`${title}: after`" class="absolute inset-0 w-full h-full object-cover" :loading="eager ? 'eager' : 'lazy'" :fetchpriority="eager ? 'high' : 'auto'" decoding="async" draggable="false" :src="img(after, 1280)" />
       <!-- Before (clipped) -->
-      <img :src="img(before, 1280)" :srcset="srcset(before, 1600)" sizes="(min-width: 1024px) 760px, 100vw" :alt="`${title}: before`" class="absolute inset-0 w-full h-full object-cover" :style="{ clipPath: `inset(0 ${100 - pos}% 0 0)` }" :loading="eager ? 'eager' : 'lazy'" decoding="async" draggable="false" />
+      <img :srcset="srcset(before, 1600)" :sizes="sizes" :alt="`${title}: before`" class="absolute inset-0 w-full h-full object-cover" :style="{ clipPath: `inset(0 ${100 - pos}% 0 0)` }" :loading="eager ? 'eager' : 'lazy'" decoding="async" draggable="false" :src="img(before, 1280)" />
 
       <span class="absolute top-3 left-3 chip !bg-black/60 !text-white !border-white/15 backdrop-blur">Before</span>
       <span class="absolute top-3 right-3 chip !bg-[#0b63b0] !text-white !border-transparent">After</span>
@@ -27,7 +27,15 @@
 import { ref } from 'vue';
 import { img, srcset } from '@/utils/img';
 
-defineProps({ before: String, after: String, title: { type: String, default: '' }, eager: Boolean, ratio: { type: String, default: 'aspect-square' } });
+defineProps({
+  before: String,
+  after: String,
+  title: { type: String, default: '' },
+  eager: Boolean,
+  ratio: { type: String, default: 'aspect-square' },
+  // Width the slider is shown at, for picking the image size (the service page default; Home passes its own).
+  sizes: { type: String, default: '(min-width: 1024px) 760px, 100vw' },
+});
 
 const pos = ref(50);
 const box = ref(null);

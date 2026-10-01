@@ -7,15 +7,15 @@
         <div class="relative mr-3 mb-3">
           <div class="absolute -right-3 -bottom-3 w-full h-full rounded-2xl bg-[var(--s-accent)] opacity-90" aria-hidden="true"></div>
           <div class="relative aspect-[4/3] sm:aspect-[16/10] rounded-2xl overflow-hidden s-surface-2 shadow-[var(--s-shadow-lg)]">
-            <img :src="img(heroPhoto, 1024)" :srcset="srcset(heroPhoto, 1600)" :sizes="heroSizes" :alt="hero.title || company.name"
-              width="1024" height="768" class="img-cover object-[45%_20%]" fetchpriority="high" decoding="async" />
+            <img :srcset="srcset(heroPhoto, 1600)" :sizes="heroSizes" :alt="hero.title || company.name"
+              width="1024" height="768" class="img-cover object-[45%_20%]" fetchpriority="high" decoding="async" :src="img(heroPhoto, 1024)" />
             <p class="absolute right-3 top-3 inline-flex items-center gap-2 rounded-md bg-black/55 backdrop-blur px-3 py-1.5 text-[13px] font-semibold text-white">
               <span class="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></span>{{ heroCaption }}
             </p>
           </div>
           <!-- Close-up of the work, overlapping the bottom-left corner -->
           <div class="absolute left-3 -bottom-5 w-28 aspect-[4/3] rounded-lg overflow-hidden border-[3px] border-[var(--s-bg-alt)] shadow-[var(--s-shadow-lg)] s-surface-2">
-            <img :src="img(heroDetail, 320)" :srcset="srcset(heroDetail, 640)" sizes="112px" alt="Close-up: fitting a floor spring under a glass door" loading="lazy" decoding="async" class="img-cover" />
+            <img :srcset="srcset(heroDetail, 640)" sizes="112px" alt="Close-up: fitting a floor spring under a glass door" loading="lazy" decoding="async" class="img-cover" :src="img(heroDetail, 320)" />
           </div>
         </div>
       </div>
@@ -50,8 +50,8 @@
         <div v-if="heroPhoto" class="hidden lg:block relative justify-self-end w-full max-w-[30rem] mr-6 mb-6 mt-4">
           <div class="absolute -right-5 -bottom-5 w-full h-full rounded-2xl bg-[var(--s-accent)] opacity-90" aria-hidden="true"></div>
           <div class="relative aspect-[4/5] rounded-2xl overflow-hidden s-surface-2 shadow-[var(--s-shadow-lg)]">
-            <img :src="img(heroPhoto, 1024)" :srcset="srcset(heroPhoto, 1600)" :sizes="heroSizes" :alt="hero.title || company.name"
-              width="800" height="1000" class="img-cover object-[45%_30%]" fetchpriority="high" decoding="async" />
+            <img :srcset="srcset(heroPhoto, 1600)" :sizes="heroSizes" :alt="hero.title || company.name"
+              width="800" height="1000" class="img-cover object-[45%_30%]" fetchpriority="high" decoding="async" :src="img(heroPhoto, 1024)" />
             <p class="absolute right-4 bottom-4 inline-flex items-center gap-2 rounded-md bg-black/55 backdrop-blur px-3 py-1.5 text-[13px] font-semibold text-white">
               <span class="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></span>{{ heroCaption }}
             </p>
@@ -59,7 +59,7 @@
 
           <!-- Close-up of the work, overlapping the top-left corner -->
           <div class="absolute -left-12 top-10 w-44 aspect-[4/3] rounded-xl overflow-hidden border-4 border-[var(--s-bg-alt)] shadow-[var(--s-shadow-lg)] s-surface-2">
-            <img :src="img(heroDetail, 480)" :srcset="srcset(heroDetail, 800)" sizes="176px" alt="Close-up: fitting a floor spring under a glass door" class="img-cover" loading="lazy" decoding="async" />
+            <img :srcset="srcset(heroDetail, 800)" sizes="176px" alt="Close-up: fitting a floor spring under a glass door" class="img-cover" loading="lazy" decoding="async" :src="img(heroDetail, 480)" />
           </div>
 
           <!-- Rating card, overlapping the bottom-left corner -->
@@ -133,12 +133,12 @@
         </div>
         <!-- Portrait frame (most job photos are portrait), so nothing is cropped away and the section stays compact -->
         <div class="grid lg:grid-cols-[minmax(0,26rem)_1fr] gap-8 lg:gap-12 items-center">
-          <BeforeAfter :key="active.id" :before="active.bef_img" :after="active.aft_img" :title="active.name" ratio="aspect-[4/5]" class="w-full max-w-md mx-auto lg:max-w-none" />
+          <BeforeAfter :key="active.id" sizes="(min-width: 1024px) 420px, 100vw" :before="active.bef_img" :after="active.aft_img" :title="active.name" ratio="aspect-[4/5]" class="w-full max-w-md mx-auto lg:max-w-none" />
           <div class="min-w-0">
             <div class="grid gap-3" role="tablist" aria-label="Choose a job">
               <button v-for="(j, i) in showcase" :key="j.id" type="button" role="tab" :aria-selected="i === activeJob" @click="activeJob = i"
                 :class="['text-left rounded-lg border p-3 sm:p-4 flex items-center gap-4 transition', i === activeJob ? 'border-[var(--s-accent)] bg-[var(--s-surface)] shadow-[var(--s-shadow)]' : 's-border hover:border-[var(--s-border-2)] hover:bg-[var(--s-surface)]']">
-                <img :src="img(j.aft_img, 160)" alt="" width="72" height="72" loading="lazy" decoding="async" class="w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-md object-cover shrink-0 border s-border" />
+                <img alt="" width="72" height="72" loading="lazy" decoding="async" class="w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-md object-cover shrink-0 border s-border" :src="img(j.aft_img, 160)" />
                 <span class="min-w-0">
                   <span class="block font-bold s-heading text-[16px] leading-snug">{{ j.name }}</span>
                   <span v-if="j.short_summary" class="mt-1 block text-[14.5px] s-muted leading-relaxed line-clamp-2">{{ j.short_summary }}</span>
@@ -216,7 +216,7 @@
         <p class="footer-h !mb-0 shrink-0">Trusted by</p>
         <div class="flex flex-wrap items-center justify-center md:justify-start gap-x-12 gap-y-6">
           <div v-for="p in partners" :key="p.id" class="h-10 w-28 flex items-center justify-center opacity-60 hover:opacity-100 transition dark:invert dark:hue-rotate-180">
-            <img :src="'/' + p.image" alt="" class="max-h-full max-w-full object-contain grayscale" loading="lazy" />
+            <img alt="" class="max-h-full max-w-full object-contain grayscale" loading="lazy" :src="'/' + p.image" />
           </div>
         </div>
       </div>
