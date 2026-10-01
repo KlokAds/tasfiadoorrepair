@@ -34,7 +34,7 @@ class FrontendController extends Controller
     {
         $hero = HomeHero::orderBy('id')->first();
         // Same sizes as the hero photo in Home.vue (480px wide on large screens), so the preload is the file that is used.
-        ResponsiveImage::preload($hero?->img, '(min-width: 1024px) 480px, 100vw', 1600);
+        ResponsiveImage::preload($hero?->img, '(min-width: 1024px) 480px, 85vw', 1600); // same sizes as Home.vue
         $services = $this->liveServices()->with(['prices' => fn ($q) => $q->where('is_active', true)])->take(8)->get(self::CARD);
 
         return Inertia::render('Frontend/Home', [

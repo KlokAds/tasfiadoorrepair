@@ -303,7 +303,8 @@ const stats = computed(() => statsFrom(props.counters));
 // Hero photo: the one set in admin, else the first service photo.
 const heroPhoto = computed(() => props.hero.image || props.services.find((s) => s.image)?.image || null);
 // Same sizes on both hero images, so the browser downloads the photo only once.
-const heroSizes = '(min-width: 1024px) 480px, 100vw';
+// Phones get the 640px copy (sharp at this size, far smaller than 800px). Must match FrontendController's preload.
+const heroSizes = '(min-width: 1024px) 480px, 85vw';
 // Small close-up photo layered on the desktop hero (from the photo library).
 const heroDetail = 'Images/fl1.jpg';
 const heroCaption = computed(() => texts.value.hero_caption || 'Sliding glass door repair, Singapore');
