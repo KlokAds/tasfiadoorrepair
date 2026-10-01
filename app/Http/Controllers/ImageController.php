@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 /**
- * Responsive WebP copies of uploaded images: /cache/im/{width}/{path}.webp
- * (/cache/img/... is the older folder at a higher quality; its links redirect here.)
+ * Responsive WebP copies of uploaded images: /cache/w/{width}/{path}.webp
+ * (/cache/img/... and /cache/im/... are older folders; their links redirect here.)
  *
  * The first request builds the file inside public/, so every later request is served
  * directly by the web server as a static file (no PHP). Only a fixed set of widths and
@@ -14,11 +14,18 @@ class ImageController extends Controller
 {
     public const WIDTHS = [96, 160, 320, 480, 640, 800, 1024, 1280, 1600, 1920];
     private const ROOTS = ['Admin/', 'uploads/', 'images/', 'Images/'];
-    /** Folder under public/ for the copies, and their WebP quality (68: much smaller files, no visible loss). */
-    public const DIR = 'cache/im';
-    private const QUALITY = 68;
+    /** Folder under public/ for the copies. */
+    public const DIR = 'cache/w';
+    /** Older folders, still served if a file is there and cleaned with the current one. */
+    private const OLD_DIRS = ['cache/img', 'cache/im'];
+    /**
+     * WebP qualities tried in turn: 68 for most photos; a busy, noisy photo that is still heavy
+     * (over MAX_BYTES_PER_PIXEL) is saved again at a lower quality, where the loss does not show.
+     */
+    private const QUALITIES = [68, 55, 45];
+    private const MAX_BYTES_PER_PIXEL = 0.25;
 
-    /** Old links (/cache/img/...) whose file is not on disk: send them to the current folder. */
+    /** Old links (/cache/img/..., /cache/im/...) whose file is not on disk: send them to the current folder. */
     public function legacy(int $width, string $path)
     {
         abort_unless(in_array($width, self::WIDTHS, true), 404);
@@ -61,7 +68,7 @@ class ImageController extends Controller
             return;
         }
         foreach (self::WIDTHS as $w) {
-            foreach ([self::DIR, 'cache/img'] as $dir) {
+            foreach ([self::DIR, ...self::OLD_DIRS] as $dir) {
                 $file = public_path("{$dir}/{$w}/{$path}.webp");
                 if (is_file($file)) {
                     @unlink($file);
@@ -118,7 +125,14 @@ class ImageController extends Controller
             return false;
         }
         $tmp = $target . '.' . bin2hex(random_bytes(4)) . '.tmp';
-        $ok = imagewebp($out, $tmp, self::QUALITY);
+        $ok = false;
+        foreach (self::QUALITIES as $quality) {
+            $ok = imagewebp($out, $tmp, $quality);
+            clearstatcache(true, $tmp);
+            if (!$ok || filesize($tmp) <= $newW * $newH * self::MAX_BYTES_PER_PIXEL) {
+                break;
+            }
+        }
         imagedestroy($img);
         imagedestroy($out);
         if (!$ok) {
