@@ -11,7 +11,7 @@
       <h3 class="text-[16px] sm:text-[18px] font-bold leading-snug s-heading line-clamp-3 sm:line-clamp-2 sm:min-h-[2lh] group-hover:text-[var(--s-accent)] transition-colors" style="font-family: var(--font-display)">{{ service.name }}</h3>
       <p v-if="service.short_summary" class="hidden sm:block mt-2 text-[14.5px] s-muted leading-relaxed"><span class="line-clamp-2">{{ service.short_summary }}</span></p>
       <span class="mt-auto pt-4 flex items-center justify-between gap-2 text-[14px] font-semibold">
-        <span v-if="service.from_price" class="s-heading">From S${{ Number(service.from_price).toLocaleString() }}</span>
+        <span v-if="service.from_price" class="s-heading">From S${{ groupDigits(service.from_price) }}</span>
         <span v-else class="s-muted">Free quote</span>
         <span class="s-accent inline-flex items-center gap-1">
           <span class="hidden sm:inline">Details</span>
@@ -23,6 +23,7 @@
 </template>
 
 <script setup>
+import { groupDigits } from '@/utils/fmt';
 import { Link } from '@inertiajs/vue3';
 import { img, srcset } from '@/utils/img';
 
