@@ -26,8 +26,8 @@ class DashboardController extends Controller
         if ($can('enquiries.view')) {
             $kpis[] = [
                 'label' => 'Enquiries (30 days)',
-                'value' => Message::where('created_at', '>=', now()->subDays(30))->count(),
-                'hint' => Message::where('is_read', 0)->count() . ' unread',
+                'value' => Message::notSpam()->where('created_at', '>=', now()->subDays(30))->count(),
+                'hint' => Message::notSpam()->where('is_read', 0)->count() . ' unread',
                 'href' => '/admin/messages',
             ];
         }
@@ -89,12 +89,12 @@ class DashboardController extends Controller
                 ->when(!$can('articles.edit_all'), fn ($q) => $q->where('author_id', $user->id))
                 ->with('author:id,name')->orderBy('scheduled_at')->take(5)->get()
                 ->map(fn ($b) => ['id' => $b->id, 'name' => $b->name, 'by' => $b->author?->name, 'at' => $b->scheduled_at?->toIso8601String()]),
-            'recentMessages' => $can('enquiries.view') ? Message::latest()->take(6)->get(['id', 'name', 'email', 'phone', 'subject', 'is_read', 'created_at']) : [],
+            'recentMessages' => $can('enquiries.view') ? Message::notSpam()->latest()->take(6)->get(['id', 'name', 'email', 'phone', 'subject', 'is_read', 'created_at']) : [],
             // Unread enquiries of the last 30 days for the inbox card at the top (reply on WhatsApp or
             // call in one click). Older unread ones (e.g. imported from the old site) stay in Enquiries.
             'inbox' => $can('enquiries.view') ? [
-                'unread' => Message::where('is_read', 0)->where('created_at', '>=', now()->subDays(30))->count(),
-                'items' => Message::where('is_read', 0)->where('created_at', '>=', now()->subDays(30))->latest()->take(5)->get(['id', 'name', 'email', 'phone', 'subject', 'message', 'created_at'])
+                'unread' => Message::notSpam()->where('is_read', 0)->where('created_at', '>=', now()->subDays(30))->count(),
+                'items' => Message::notSpam()->where('is_read', 0)->where('created_at', '>=', now()->subDays(30))->latest()->take(5)->get(['id', 'name', 'email', 'phone', 'subject', 'message', 'created_at'])
                     ->map(fn ($m) => [
                         'id' => $m->id, 'name' => $m->name, 'email' => $m->email, 'phone' => $m->phone, 'subject' => $m->subject,
                         'text' => \Illuminate\Support\Str::limit(trim(preg_replace('/\s+/', ' ', strip_tags((string) $m->message))), 140),
