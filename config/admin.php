@@ -77,6 +77,20 @@ return [
         'batch_size' => 50,        // approved decisions run per "Run batch" (App\Support\AuditBatch)
     ],
 
+    // Area pages (Admin → Locations, `php artisan locations:towns`): this site's trade, in plain words.
+    'location_pages' => [
+        'title' => 'Door repair',
+        'brand' => 'Tasfia Door Repair',
+        'short' => 'repairs and replacement of doors, locks, hinges, sliding doors and floor springs',
+        'work' => [
+            'hdb' => 'In HDB flats we repair and replace main doors, bedroom and toilet doors, hinges and door locks, and fix sliding and folding doors that stick or drop.',
+            'condo' => 'In condominiums we handle glass sliding and balcony doors, rollers and tracks, door locks, and wardrobe and kitchen cabinet doors.',
+            'landed' => 'For landed homes we repair wooden and glass main doors, sliding doors, door frames and hinges, and floor springs on heavy glass doors.',
+            'commercial' => 'For shops, offices and factories we service glass doors, floor springs, automatic sliding doors and broken glass panels.',
+        ],
+        'quote' => 'Send us photos and a short note of the job through the form on this page or on WhatsApp. We reply with a price and the earliest time we can come.',
+    ],
+
     // Byline on articles that have no author of their own and no default author: the team.
     'team_byline' => [
         'title' => 'Door repair specialists, Singapore',
