@@ -39,6 +39,10 @@
                 </span>
                 <span class="block text-[14px] truncate" :class="msg.is_read == 0 ? 'a-text' : 'a-muted'">{{ msg.subject || 'Website enquiry' }}</span>
                 <span class="block text-xs a-subtle truncate">{{ msg.message }}</span>
+                <span v-if="msg.wants_visit || msg.photo_urls?.length" class="mt-1 flex flex-wrap gap-1">
+                  <span v-if="msg.wants_visit" class="a-badge a-badge-accent">Site visit</span>
+                  <span v-if="msg.photo_urls?.length" class="a-badge">{{ msg.photo_urls.length }} photo{{ msg.photo_urls.length === 1 ? '' : 's' }}</span>
+                </span>
                 <span v-if="msg.is_spam || (msg.status && msg.status !== 'new')" class="mt-1 inline-flex"><span :class="['a-badge', statusBadge(msg)]">{{ msg.is_spam ? 'Spam' : statuses[msg.status] }}</span></span>
               </span>
             </button>
@@ -81,6 +85,20 @@
                 <div v-if="selected.address" class="flex gap-4 px-4 py-2.5"><dt class="w-28 shrink-0 a-subtle">Address</dt><dd>{{ selected.address }}</dd></div>
                 <div v-if="selected.date || selected.time" class="flex gap-4 px-4 py-2.5"><dt class="w-28 shrink-0 a-subtle">Preferred time</dt><dd>{{ [selected.date, selected.time?.slice(0, 5)].filter(Boolean).join(' · ') }}</dd></div>
               </dl>
+            </div>
+            <div v-if="selected.wants_visit" class="rounded-xl border a-border p-4 text-sm">
+              <p class="a-section-title mb-1">Free site visit</p>
+              <p class="font-semibold">{{ selected.visit_label }}</p>
+              <p v-if="selected.postal_code || selected.property" class="a-muted mt-0.5">{{ [selected.postal_code && 'Postal code ' + selected.postal_code, selected.property].filter(Boolean).join(' · ') }}</p>
+              <p class="a-muted mt-1">Preferred by the customer: confirm the time with them.</p>
+            </div>
+            <div v-if="selected.photo_urls?.length">
+              <p class="a-section-title mb-2">Photos</p>
+              <div class="flex flex-wrap gap-2">
+                <a v-for="(u, i) in selected.photo_urls" :key="u" :href="u" target="_blank" rel="noopener" class="block h-24 w-24 overflow-hidden rounded-lg border a-border" :title="`Photo ${i + 1}: open full size`">
+                  <img :src="u" :alt="`Photo ${i + 1}`" class="h-full w-full object-cover" loading="lazy" />
+                </a>
+              </div>
             </div>
             <div>
               <p class="a-section-title mb-2">Message</p>
