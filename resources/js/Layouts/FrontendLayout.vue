@@ -25,7 +25,7 @@
 
         <!-- Desktop nav -->
         <nav class="hidden xl:flex items-center gap-0.5 h-full" aria-label="Main">
-          <Link v-for="item in primaryBefore" :key="item.href" :href="item.href" :class="navClass(item.href)">{{ item.label }}</Link>
+          <Link v-for="item in primaryBefore.filter(i => i.href !== '/')" :key="item.href" :href="item.href" :class="navClass(item.href)">{{ item.label }}</Link>
           <button type="button" :class="[navClass('/services'), 'gap-1']" :aria-expanded="open === 'services'" aria-haspopup="true"
             @mouseenter="openMenu('services')" @mouseleave="closeMenuSoon" @click="toggle('services')">
             Services
