@@ -43,8 +43,8 @@
           <button type="button" @click="searchOpen = true" class="w-10 h-10 rounded-md border s-border grid place-items-center s-muted hover:text-[var(--s-accent-text)] hover:border-[var(--s-accent)]" aria-label="Search the website" title="Search (Ctrl K)">
             <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M21 21l-5.2-5.2M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" /></svg>
           </button>
-          <a v-if="company.tel" :href="'tel:' + tel" class="hidden md:flex items-center gap-2.5" :aria-label="`Call us on ${company.phone}`" :title="company.phone">
-            <span class="w-10 h-10 rounded-md bg-[var(--s-accent-soft)] s-accent grid place-items-center">
+          <a v-if="company.tel" :href="'tel:' + tel" class="group hidden md:flex items-center gap-2.5" :aria-label="`Call us on ${company.phone}`" :title="company.phone">
+            <span class="w-10 h-10 rounded-md bg-[var(--s-accent-soft)] s-accent s-icon-ring grid place-items-center transition-colors group-hover:bg-[var(--s-accent)] group-hover:text-white">
               <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="icons.phone" /></svg>
             </span>
           </a>
