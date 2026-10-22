@@ -47,10 +47,6 @@
             <span class="w-10 h-10 rounded-md bg-[var(--s-accent-soft)] s-accent grid place-items-center">
               <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="icons.phone" /></svg>
             </span>
-            <span class="leading-tight hidden 2xl:block">
-              <span class="block text-[12.5px] s-subtle">Call us</span>
-              <span class="block text-[16px] font-bold s-heading whitespace-nowrap" style="font-family: var(--font-display)">{{ company.phone }}</span>
-            </span>
           </a>
           <WhatsAppButton size="sm" class="hidden sm:inline-flex !h-10 !px-4">Get a quote</WhatsAppButton>
           <button type="button" @click="mobileOpen = !mobileOpen" class="xl:hidden w-10 h-10 rounded-md border s-border grid place-items-center s-heading" :aria-expanded="mobileOpen" aria-label="Menu">
@@ -85,7 +81,7 @@
               <div class="mt-auto pt-5 space-y-2">
                 <WhatsAppButton size="sm" class="w-full">Send a photo</WhatsAppButton>
                 <Link href="/services" class="btn btn-secondary btn-sm w-full" @click="open = null">All {{ serviceCount }} services</Link>
-                <Link v-if="hasPrices" href="/pricing" class="block text-center pt-1 text-[14.5px] link" @click="open = null">View price list</Link>
+                <Link href="/pricing" class="block text-center pt-1 text-[14.5px] link" @click="open = null">See our pricing</Link>
               </div>
             </div>
           </div>
@@ -136,7 +132,7 @@
                 </div>
                 <div class="p-3 grid grid-cols-2 gap-2 border-t s-border">
                   <Link href="/services" class="btn btn-secondary btn-sm" @click="mobileOpen = false">All services</Link>
-                  <Link v-if="hasPrices" href="/pricing" class="btn btn-secondary btn-sm" @click="mobileOpen = false">Price list</Link>
+                  <Link href="/pricing" class="btn btn-secondary btn-sm" @click="mobileOpen = false">Pricing</Link>
                 </div>
               </div>
             </div>
@@ -224,7 +220,7 @@
             <p class="footer-title">Company</p>
             <ul class="space-y-3 text-[15px] text-white/70">
               <li v-for="l in footerCompany" :key="l.href"><Link :href="l.href" class="hover:text-white transition-colors">{{ l.label }}</Link></li>
-              <li v-if="hasPrices"><Link href="/pricing" class="hover:text-white transition-colors">Price list</Link></li>
+              <li><Link href="/pricing" class="hover:text-white transition-colors">Pricing</Link></li>
             </ul>
           </div>
 
@@ -337,10 +333,8 @@ const primaryBefore = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
 ];
-// Price list links are shown only once there are prices (HandleInertiaRequests: hasPrices).
-const hasPrices = computed(() => !!page.props.hasPrices);
 const primaryAfter = computed(() => [
-  ...(hasPrices.value ? [{ label: 'Pricing', href: '/pricing' }] : []),
+  { label: 'Pricing', href: '/pricing' },
   { label: 'Projects', href: '/projects' },
   { label: 'Door tips', href: '/blogs' },
   { label: 'Contact', href: '/contact' },

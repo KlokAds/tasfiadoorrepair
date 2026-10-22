@@ -219,7 +219,7 @@ class FrontendController extends Controller
             ->whereDoesntHave('prices', fn ($q) => $q->where('is_active', true))
             ->get(['id', 'name', 'slug', 'category_id', 'short_summary']);
 
-        PageSchema::set(PageSchema::breadcrumbs([['Price list', '/pricing']]));
+        PageSchema::set(PageSchema::breadcrumbs([['Pricing', '/pricing']]));
 
         return Inertia::render('Frontend/Pricing', [
             'groups' => $services->groupBy(fn ($s) => $s->category?->name ?? 'Other services')
