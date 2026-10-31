@@ -47,3 +47,6 @@ Thumbs.db
 # Runtime state written by the app itself (automatic setup and migration lock)
 /storage/framework/setup-state.json
 /storage/framework/migrate.lock
+
+# Article rewrites waiting to be imported for review
+/storage/rewrites
